@@ -1,24 +1,24 @@
-# Omnifocus::Pivotaltracker
+# omnifocus-pivotaltracker
 
-TODO: Write a gem description
+code: https://github.com/vesan/omnifocus-pivotaltracker
 
-## Installation
+Plugin for omnifocus gem to provide Pivotal Tracker BTS synchronization.
 
-Add this line to your application's Gemfile:
-
-    gem 'omnifocus-pivotaltracker'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install omnifocus-pivotaltracker
+Pulls all (not done) stories from "My Work" for the user specified in the
+configuration file and creates corresponding tasks to Omnifocus.
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Install
+
+    $ gem install omnifocus-pivotaltracker
+
+2. Sync
+
+    $ of sync
+
+3. (On the first run, configuration file will be generated at 
+   ~/.omnifocus-pivotaltracker.yml. Go and fill your account information.)
 
 ## Contributing
 
