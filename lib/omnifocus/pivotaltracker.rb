@@ -32,18 +32,7 @@ module OmniFocus::Pivotaltracker
 
     projects.each do |project|
       fetch_stories(token, project.at("id").text, user_name).each do |story|
-        number = story.at("id").text
-        url    = story.at("url").text
-        project_name = project.at("name").text
-        ticket_id = "#{PREFIX}-#{project_name}##{number}"
-        title = "#{ticket_id}: #{story.at("name").text}"
-
-        if existing[ticket_id]
-          bug_db[existing[ticket_id]][ticket_id] = true
-          next
-        end
-
-        bug_db[project_name][ticket_id] = [title, url]
+        process_story(project, story)
       end
     end
   end
@@ -59,5 +48,20 @@ module OmniFocus::Pivotaltracker
 
     xml = Nokogiri.parse(open(url, "X-TrackerToken" => token).read)
     xml.root.xpath("//story")
+  end
+
+  def process_story(project, story)
+    number       = story.at("id").text
+    url          = story.at("url").text
+    project_name = project.at("name").text
+    ticket_id    = "#{PREFIX}-#{project_name}##{number}"
+    title        = "#{ticket_id}: #{story.at("name").text}"
+
+    if existing[ticket_id]
+      bug_db[existing[ticket_id]][ticket_id] = true
+      return
+    end
+
+    bug_db[project_name][ticket_id] = [title, url]
   end
 end
