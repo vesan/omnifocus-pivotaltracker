@@ -1,5 +1,7 @@
 require "open-uri"
 require "nokogiri"
+require "yaml"
+require "cgi"
 
 module OmniFocus::Pivotaltracker
   PREFIX  = "PT"
@@ -9,7 +11,7 @@ module OmniFocus::Pivotaltracker
     config = YAML.load(File.read(path)) rescue nil
 
     unless config then
-      config = { :token => "TOKEN" }
+      config = { :token => "TOKEN", :user_name => "Full name, initials or unique part of the user's name" }
 
       File.open(path, "w") { |f|
         YAML.dump(config, f)
@@ -22,36 +24,40 @@ module OmniFocus::Pivotaltracker
   end
 
   def populate_pivotaltracker_tasks
-    config = load_or_create_config
-    token  = config[:token]
+    config    = load_or_create_config
+    token     = config[:token]
+    user_name = config[:user_name]
 
     projects = fetch_projects(token)
 
     projects.each do |project|
-      fetch_stories(token, project["id"]).each do |story|
-        number = story["id"]
-        url    = story["url"]
-        project = project["name"]
-        ticket_id = "#{PREFIX}-#{project}##{number}"
-        title = "#{ticket_id}: #{story["name"]}"
+      fetch_stories(token, project.at("id").text, user_name).each do |story|
+        number = story.at("id").text
+        url    = story.at("url").text
+        project_name = project.at("name").text
+        ticket_id = "#{PREFIX}-#{project_name}##{number}"
+        title = "#{ticket_id}: #{story.at("name").text}"
 
         if existing[ticket_id]
           bug_db[existing[ticket_id]][ticket_id] = true
           next
         end
 
-        bug_db[project][ticket_id] = [title, url]
+        bug_db[project_name][ticket_id] = [title, url]
       end
     end
   end
 
-  def fetch_project_ids(token)
-    xml = Nokogiri.parse(open("http://www.pivotaltracker.com/services/v3/projects", "X-TrackerToken" => token).read)
+  def fetch_projects(token)
+    xml = Nokogiri.parse(open("https://www.pivotaltracker.com/services/v3/projects", "X-TrackerToken" => token).read)
     xml.root.xpath("//project")
   end
 
-  def fetch_stories(token, project_id)
-    xml = Nokogiri.parse(open("http://www.pivotaltracker.com/services/v3/projects/#{project_id}/storie", "X-TrackerToken" => token).read)
+  def fetch_stories(token, project_id, user_name)
+    url = "https://www.pivotaltracker.com/services/v3/projects/#{project_id}/stories?filter=" +
+          "mywork:#{CGI.escape(user_name)}"
+
+    xml = Nokogiri.parse(open(url, "X-TrackerToken" => token).read)
     xml.root.xpath("//story")
   end
 end
