@@ -4,8 +4,8 @@ require File.expand_path('../lib/omnifocus/pivotaltracker/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Vesa Vänskä"]
   gem.email         = ["vesa@vesavanska.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Plugin for omnifocus gem to provide Pivotal Tracker BTS synchronization.}
+  gem.summary       = %q{Plugin for omnifocus gem to provide Pivotal Tracker BTS synchronization.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
