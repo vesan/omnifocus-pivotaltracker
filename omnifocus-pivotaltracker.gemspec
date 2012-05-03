@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["vesa@vesavanska.com"]
   gem.description   = %q{Plugin for omnifocus gem to provide Pivotal Tracker BTS synchronization.}
   gem.summary       = %q{Plugin for omnifocus gem to provide Pivotal Tracker BTS synchronization.}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/vesan/omnifocus-pivotaltracker"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
