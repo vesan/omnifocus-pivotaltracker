@@ -44,7 +44,8 @@ module OmniFocus::Pivotaltracker
 
   def fetch_stories(token, project_id, user_name)
     url = "https://www.pivotaltracker.com/services/v3/projects/#{project_id}/stories?filter=" +
-          "mywork:#{CGI.escape(user_name)}"
+          "mywork:#{CGI.escape(user_name)}" +
+          "%20state:unscheduled,unstarted,started,rejected"
 
     xml = Nokogiri.parse(open(url, "X-TrackerToken" => token).read)
     xml.root.xpath("//story")
