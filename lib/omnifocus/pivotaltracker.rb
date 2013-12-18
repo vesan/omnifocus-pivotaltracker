@@ -20,14 +20,21 @@ module OmniFocus::Pivotaltracker
       abort "Created default config in #{path}. Go fill it out."
     end
 
-    config
+    if config.instance_of?(Array) then
+      config
+    else
+      [config]
+    end
   end
 
   def populate_pivotaltracker_tasks
     config    = load_or_create_config
-    token     = config[:token]
-    user_name = config[:user_name]
+    for conf in config do
+      populate_pivotaltracker_tasks_impl(conf[:token], conf[:user_name])
+    end
+  end
 
+  def populate_pivotaltracker_tasks_impl(token, user_name)
     projects = fetch_projects(token)
 
     projects.each do |project|
