@@ -20,6 +20,19 @@ configuration file and creates corresponding tasks to Omnifocus.
 3. (On the first run, configuration file will be generated at 
    ~/.omnifocus-pivotaltracker.yml. Go and fill your account information.)
 
+## Multi-account support
+
+You can add multiple accounts to the configuration file by using the YAML array
+syntax like:
+
+    ---
+    -
+      :token: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      :user_name: muo
+    -
+      :token: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      :user_name: KN
+
 ## Contributing
 
 1. Fork it
