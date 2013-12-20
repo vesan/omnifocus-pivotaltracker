@@ -20,11 +20,8 @@ module OmniFocus::Pivotaltracker
       abort "Created default config in #{path}. Go fill it out."
     end
 
-    if config.instance_of?(Array) then
-      config
-    else
-      [config]
-    end
+    # Make things working against single/multiple account settings.
+    [config].flatten
   end
 
   def populate_pivotaltracker_tasks
