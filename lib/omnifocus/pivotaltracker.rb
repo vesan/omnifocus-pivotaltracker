@@ -29,12 +29,12 @@ module OmniFocus::Pivotaltracker
 
   def populate_pivotaltracker_tasks
     config    = load_or_create_config
-    for conf in config do
-      populate_pivotaltracker_tasks_impl(conf[:token], conf[:user_name])
+    config.each do |conf|
+      populate_pivotaltracker_tasks_for_project(conf[:token], conf[:user_name])
     end
   end
 
-  def populate_pivotaltracker_tasks_impl(token, user_name)
+  def populate_pivotaltracker_tasks_for_project(token, user_name)
     projects = fetch_projects(token)
 
     projects.each do |project|
