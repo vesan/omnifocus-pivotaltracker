@@ -1,5 +1,5 @@
 require "open-uri"
-require "nokogiri"
+require "json"
 require "yaml"
 require "cgi"
 
@@ -35,32 +35,32 @@ module OmniFocus::Pivotaltracker
     projects = fetch_projects(token)
 
     projects.each do |project|
-      fetch_stories(token, project.at("id").text, user_name).each do |story|
+      fetch_stories(token, project["id"], user_name).each do |story|
         process_story(project, story)
       end
     end
+  rescue OpenURI::HTTPError => error
+    puts "Connection to Pivotal Tracker failed and updating could not be done."
   end
 
   def fetch_projects(token)
-    xml = Nokogiri.parse(open("https://www.pivotaltracker.com/services/v3/projects", "X-TrackerToken" => token).read)
-    xml.root.xpath("//project")
+    JSON.parse(open("https://www.pivotaltracker.com/services/v5/projects", "X-TrackerToken" => token).read)
   end
 
   def fetch_stories(token, project_id, user_name)
-    url = "https://www.pivotaltracker.com/services/v3/projects/#{project_id}/stories?filter=" +
+    url = "https://www.pivotaltracker.com/services/v5/projects/#{project_id}/stories?filter=" +
           "mywork:#{CGI.escape(user_name)}" +
           "%20state:unscheduled,unstarted,started,rejected"
 
-    xml = Nokogiri.parse(open(url, "X-TrackerToken" => token).read)
-    xml.root.xpath("//story")
+    JSON.parse(open(url, "X-TrackerToken" => token).read)
   end
 
   def process_story(project, story)
-    number       = story.at("id").text
-    url          = story.at("url").text
-    project_name = project.at("name").text
+    number       = story["id"]
+    url          = story["url"]
+    project_name = project["name"]
     ticket_id    = "#{PREFIX}-#{project_name}##{number}"
-    title        = "#{ticket_id}: #{story.at("name").text}"
+    title        = "#{ticket_id}: #{story["name"]}"
 
     if existing[ticket_id]
       bug_db[existing[ticket_id]][ticket_id] = true
