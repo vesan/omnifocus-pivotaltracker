@@ -50,7 +50,7 @@ module OmniFocus::Pivotaltracker
   def fetch_stories(token, project_id, user_name)
     url = "https://www.pivotaltracker.com/services/v5/projects/#{project_id}/stories?filter=" +
           "mywork:#{CGI.escape(user_name)}" +
-          "%20state:unscheduled,unstarted,started,rejected"
+          "%20state:unscheduled,planned,unstarted,started,rejected"
 
     JSON.parse(open(url, "X-TrackerToken" => token).read)
   end
