@@ -11,7 +11,7 @@ module OmniFocus::Pivotaltracker
     config = YAML.load(File.read(path)) rescue nil
 
     unless config then
-      config = { :token => "TOKEN", :user_name => "Full name, initials or unique part of the user's name" }
+      config = { :token => "TOKEN, get yours from https://www.pivotaltracker.com/profile", :user_name => "Full name, initials or unique part of the user's name" }
 
       File.open(path, "w") { |f|
         YAML.dump(config, f)
