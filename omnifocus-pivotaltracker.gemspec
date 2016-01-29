@@ -15,5 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = OmniFocus::Pivotaltracker::VERSION
 
-  gem.add_dependency "omnifocus", ">= 2.0.0"
+  gem.add_dependency "omnifocus", ">= 2.3.0"
 end

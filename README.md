@@ -29,9 +29,17 @@ syntax like:
     -
       :token: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
       :user_name: muo
+      :points:
+        1: 30
+        2: 60
+        3: 90
     -
       :token: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
       :user_name: KN
+      :points:
+        1: 60
+        2: 120
+        3: 180
 
 ## Contributing
 
